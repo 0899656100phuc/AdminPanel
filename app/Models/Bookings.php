@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\BookingDetail;
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Models\People;
+
 
 
 
@@ -14,7 +16,7 @@ class Bookings extends Model
 {
     use HasFactory;
     protected $table = 'bookings';
-    
+
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = [
@@ -23,19 +25,26 @@ class Bookings extends Model
         'end_date',
         'total_price',
         'status',
-        'user_id'
+        'user_id',
+        'date_booking',
+        'note',
+        'number_of_room',
+
     ];
     public function bookingDetailBooking()
     {
-        return $this->hasMany(BookingDetail::class,'booking_id');
+        return $this->hasMany(BookingDetail::class, 'booking_id');
     }
     public function payments()
     {
         return $this->hasMany(Payment::class);
     }
+    public function numberOfPeople()
+    {
+        return $this->hasMany(People::class, 'id_booking');
+    }
     public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class,);
     }
-    
 }

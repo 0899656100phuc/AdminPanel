@@ -17,7 +17,7 @@ class Room extends Model
 {
     use HasFactory;
     protected $table = 'rooms';
-    
+
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = [
@@ -39,7 +39,7 @@ class Room extends Model
     }
     public function bookingDetailRoom()
     {
-        return $this->hasMany(BookingDetail::class,'room_id');
+        return $this->hasOne(BookingDetail::class, 'room_id');
     }
     public function images()
     {

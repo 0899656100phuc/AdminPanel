@@ -61,7 +61,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
             ]);
         }
-        $response = ['message' => 'Incorrect username or password'];
-        return response()->json([$response, 400]);
+        $response = ['message' => 'Incorrect username or password','status'=>204];
+        return response()->json($response, 200);
     }
 }

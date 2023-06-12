@@ -9,9 +9,9 @@ use App\Models\Bookings;
 
 
 
-class Customer extends Authenticatable 
+class Customer extends Authenticatable
 {
-    use HasFactory,HasApiTokens;
+    use HasFactory, HasApiTokens;
 
     protected $table = 'customers';
 
@@ -27,6 +27,6 @@ class Customer extends Authenticatable
     ];
     public function bookings()
     {
-        return $this->hasMany(Bookings::class);
+        return $this->hasMany(Bookings::class, 'user_id');
     }
 }

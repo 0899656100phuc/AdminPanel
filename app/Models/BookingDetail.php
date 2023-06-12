@@ -11,21 +11,21 @@ class BookingDetail extends Model
 {
     use HasFactory;
     protected $table = 'bookings_detail';
-    
+
     protected $primaryKey = 'id';
     public $timestamps = false;
     protected $fillable = [
-       
+
         'room_id',
         'booking_id',
 
     ];
     public function bookings()
     {
-        return $this->belongsTo(Bookings::class,);
+        return $this->belongsTo(Bookings::class, 'booking_id');
     }
     public function rooms()
     {
-        return $this->belongsTo(Room::class,);
+        return $this->belongsTo(Room::class, 'booking_id');
     }
 }

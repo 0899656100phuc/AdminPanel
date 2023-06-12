@@ -29,26 +29,26 @@
                     <label for="recipient-name" class="col-form-label">Hotel:</label>
                     <select name="hotel" class="form-control" id="">
                         @foreach ($hotels as $item)
-                            <option value="{{$item->id}}">{{$item->id}} / {{$item->name}}</option>
+                        <option value="{{$item->id}}">{{$item->id}} / {{$item->name}}</option>
 
                         @endforeach
-                        
+
                     </select>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Type Room:</label>
                     <select name="typeroom" class="form-control" id="">
                         @foreach ($typerooms as $item)
-                            <option value="{{$item->id}}">{{$item->id}} / {{$item->name}}</option>
+                        <option value="{{$item->id}}">{{$item->id}} / {{$item->name}}</option>
                         @endforeach
-                        
+
                     </select>
                 </div>
                 <div class="col">
                     <div class="mb-3">
                         <label for="formFileSm" class="form-label">Hình ảnh phòng:</label>
-                        <input  class="form-control form-control-sm" id="formFiles" type="file" name="images[]" multiple>
+                        <input class="form-control form-control-sm" id="formFiles" type="file" name="images[]" multiple>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -68,11 +68,11 @@
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Status:</label>
                     <select name="status">
-                    <option value="0" >Còn phòng trống</option>
-                    <option value="1" >Đã được đặt</option>
-                </select>
+                        <option value="Còn trống">Còn phòng trống</option>
+                        <option value="Đã đặt">Đã được đặt</option>
+                    </select>
                 </div>
-                
+
                 <div class="col-md-6">
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
@@ -81,25 +81,25 @@
         </div>
 
     </div>
-    
+
 </div>
 <script>
-    var i=0;
-    $('#add').click(function(){
-        
+    var i = 0;
+    $('#add').click(function() {
+
         ++i;
         $('#table').append(
             `<tr>
                
                 <td>
-                    <input type="text" name="inputs[`+i+`][name_service]" placeholder="Enter your service" class="form-control">
+                    <input type="text" name="inputs[` + i + `][name_service]" placeholder="Enter your service" class="form-control">
                 </td>
                 <td>
                     <button type="button" name="add" id="add" class="btn btn-danger remove-input-field">remove</button>
                 </td>
             </tr>`);
     });
-    $(document).on('click', '.remove-input-field', function () {
+    $(document).on('click', '.remove-input-field', function() {
         $(this).parents('tr').remove();
     });
 </script>

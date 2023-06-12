@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\BookingDetail;
 use App\Models\Bookings;
 use App\Models\Room;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class CheckPay extends Command
@@ -30,23 +31,27 @@ class CheckPay extends Command
      */
     public function handle()
     {
-        
-        $bookings = Bookings::where('status', 'Chưa thanh toán')
-                ->where('date_booking', '>=', now()->subMinutes(1))
-                ->get();
-    
-            foreach ($bookings as $booking) {
-                $bookingDetail = BookingDetail::where('booking_id', $booking->id)->first();
-                if ($bookingDetail) {
-                    $room = Room::find($bookingDetail->room_id);
-                    if ($room) {
-                        $room->status = 'Còn trống';
-                        $room->save();
-                        
-                    }
-                }
+        /*    $bookings = Bookings::where('status', 'Chờ thanh toán')
+            ->where('date_booking', '<=', now()->subMinutes(5))
+            ->get();
+
+        foreach ($bookings as $booking) {
+            $room = $booking->bookingDetailBooking->room;
+            if ($room && $room->status == 'Đã đặt') {
+                $room->status = 'Còn trống';
+                $room->save();
             }
+        } */
+        $bookings = Bookings::where('status', 'Chờ thanh toán')
+            ->where('date_booking', '<=', now()->subMinutes(2))
+            ->get();
+
+        foreach ($bookings as $booking) {
+            $booking->status = 'Chưa thanh toán';
+            $booking->save();
+
+            $booking->bookingDetailBooking->rooms->status = 'Còn trống';
+            $booking->bookingDetailBooking->rooms->save();
+        }
     }
-    
-    
 }

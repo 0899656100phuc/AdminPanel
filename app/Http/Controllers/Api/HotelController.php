@@ -37,17 +37,17 @@ class HotelController extends Controller
         foreach ($hotels->rooms as $room) {
             $room->type_room = $room->typeRoom;
             $room->images_room = $room->images;
-            $room->service_room =$room->services;
+            $room->service_room = $room->services;
             $images = $room->images;
-            foreach($images as $image) {
+            foreach ($images as $image) {
                 $image->image = url('images/room/' . $image->image);
             }
             unset($room->typeRoom);
             unset($room->images);
-            unset($room->services );
+            unset($room->services);
         }
-        
-       
+
+
         if ($hotels) {
             return response()->json([
                 'success' => true,
@@ -57,7 +57,6 @@ class HotelController extends Controller
         } else {
             return response()->json(['success' => false, 'message' => 'Hotel not found.'], 404);
         }
-
     }
 
 
@@ -65,8 +64,6 @@ class HotelController extends Controller
     public function search(Request $request)
     {
         $address = $request->get('address');
-
-
         $numGuests = $request->get('numberPeople');
         $numRooms = $request->get('numberRooms');
         $checkInDate = $request->get('checkin_date');
@@ -86,27 +83,28 @@ class HotelController extends Controller
                 'rooms' => function ($query) use ($numGuests, $checkInDate, $checkOutDate) {
                     $query->with([
                         'typeRoom' => function ($query) {
-                                    $query->orderBy('price', 'asc')->first();
-                                }
+                            $query->orderBy('price', 'asc')->first();
+                        }
                     ])
                         ->where('number_of_people', '>=', $numGuests)
                         ->whereDoesntHave('bookingDetail', function ($query) use ($checkInDate, $checkOutDate) {
-                                    $query->where(function ($q) use ($checkInDate, $checkOutDate) {
-                                        $q->whereBetween('checkin', [$checkInDate, $checkOutDate])
-                                            ->orWhereBetween('checkout', [$checkInDate, $checkOutDate])
-                                            ->orWhere(function ($q2) use ($checkInDate, $checkOutDate) {
-                                                                    $q2->where('checkin', '<=', $checkInDate)
-                                                                        ->where('checkout', '>=', $checkOutDate);
-                                                                });
+                            $query->where(function ($q) use ($checkInDate, $checkOutDate) {
+                                $q->whereBetween('checkin', [$checkInDate, $checkOutDate])
+                                    ->orWhereBetween('checkout', [$checkInDate, $checkOutDate])
+                                    ->orWhere(function ($q2) use ($checkInDate, $checkOutDate) {
+                                        $q2->where('checkin', '<=', $checkInDate)
+                                            ->where('checkout', '>=', $checkOutDate);
                                     });
-                                });
+                            });
+                        });
                 }
             ])
             ->with([
                 'rooms' => function ($query) {
-                    $query->with('typeRoom');
+                    $query->where('status', '!=', 'Đã đặt')->with('typeRoom');
                 }
             ])
+            ->has('rooms', '>', 0)
             ->get();
         foreach ($hotels as $hotel) {
             $lowestPrice = null;

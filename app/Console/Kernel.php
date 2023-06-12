@@ -19,22 +19,20 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+
         $schedule->command('checkPay:cron')->everyMinute();
         /* $schedule->call(function () {
-            $bookings = Bookings::where('status', 'Chưa thanh toán')
-                ->where('date_booking', '>=', now()->subMinutes(1))
+            $bookings = Bookings::where('status', 'Chờ thanh toán')
+                ->where('date_booking', '<=', now()->subMinutes(5))
                 ->get();
-    
+
             foreach ($bookings as $booking) {
-                $bookingDetail = BookingDetail::where('booking_id', $booking->id)->first();
-                if ($bookingDetail) {
-                    $room = Room::find($bookingDetail->room_id);
-                    if ($room) {
-                        $room->status = 'Còn trống';
-                        $room->save();
-                        
-                    }
-                }
+
+
+                $bookingDetail = $booking->bookingDetailBooking;
+                $room = $bookingDetail->room;
+                $room->status = 'Còn trống'; // Update the room status to "Còn trống" (Available)
+                $room->save();
             }
         })->everyMinute(); */
     }
@@ -46,9 +44,8 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
-    
 }
